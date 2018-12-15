@@ -1,9 +1,6 @@
 package rectifyplus.log;
 
 import java.util.Calendar;
-import java.util.Iterator;
-import java.util.Map.Entry;
-
 import org.bson.Document;
 
 import com.mongodb.client.MongoClient;

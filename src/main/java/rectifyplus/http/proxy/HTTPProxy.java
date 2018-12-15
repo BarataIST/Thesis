@@ -21,6 +21,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.HttpContent;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpRequest;
@@ -54,8 +55,8 @@ public class HTTPProxy {
                         .withPort(this.localPort)
                         .withFiltersSource(new HttpFiltersSourceAdapter() {
                         	@Override
-                            public int getMaximumResponseBufferSizeInBytes() {
-                                return 10 * 1024 * 1024;
+                            public int getMaximumRequestBufferSizeInBytes() {
+                                return 512 * 1024;
                             }
                             public HttpFilters filterRequest(HttpRequest originalRequest, ChannelHandlerContext ctx) {
                                 return new HttpFiltersAdapter(originalRequest) {
@@ -80,12 +81,18 @@ public class HTTPProxy {
                                             request = (FullHttpRequest) httpObject;
                                             CompositeByteBuf contentBuf = (CompositeByteBuf) request.content();
                                             String contentStr = contentBuf.toString(CharsetUtil.UTF_8);
-
-                                            JSONObject obj = new JSONObject(contentStr);
-                                            System.out.println(obj.toString());
+                                            System.out.println("CONTEUDO: " + contentStr + "\n");
+                                            
+                                            request.setUri(remoteAddress + request.getUri().toString()); 
+                                            System.out.println("URI:" + request.getUri().toString() + "\n");
+                                            //JSONObject obj = new JSONObject(contentStr);
+                                            //System.out.println(obj.toString());
                                             //System.out.println(request.content().toString());
+                                            //request.set
                                         }
-                                        try {                                                                              	                                  
+                                        
+                                        return super.clientToProxyRequest((HttpObject) request);
+                                        /*try {    
                                             return getHttpResponse( (HttpURLConnection) new URL(remoteAddress + originalRequest.getUri()).openConnection());
                                         }catch(MalformedURLException e1)  {
                                             System.out.println("Exception 1");
@@ -93,14 +100,14 @@ public class HTTPProxy {
                                         }catch (IOException e1){
                                             System.out.println("Exception 2");
                                             return null;
-                                        }
+                                        }*/
 
                                     }
 
                                     @Override
                                     public HttpObject serverToProxyResponse(HttpObject httpObject) {
                                         // TODO: implement your filtering here
-                                        System.out.println("RESPOSTA:" + httpObject.toString());
+                                        //System.out.println("RESPOSTA:" + httpObject.toString());
                                         return httpObject;
                                     }
                                 };
@@ -268,16 +275,10 @@ public class HTTPProxy {
             e1.printStackTrace();
         }
 //        String inputLine;
-//        StringBuffer response = new StringBuffer();
-
-        
-        
+//        StringBuffer response = new StringBuffer();  
         try {
         	
         	buf = bis.readAllBytes();
-        	
-        	
-        	
 //            while ((inputLine = in.readLine()) != null) {
 //                response.append(inputLine);
 //            }
@@ -304,7 +305,6 @@ public class HTTPProxy {
         HttpResponse httpResponse = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK,
                 buffer);
         HttpHeaders.setContentLength(httpResponse, buffer.readableBytes());
-
         HttpHeaders.setHeader(httpResponse, HttpHeaders.Names.CONTENT_TYPE,
                 con.getHeaderField(HttpHeaders.Names.CONTENT_TYPE));
         return httpResponse;
