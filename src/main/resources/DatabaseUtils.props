@@ -1,0 +1,2 @@
+jdbcDriver=mongodb.jdbc.MongoDriver
+jdbcURL=jdbc:mongo://localhost:27017/rectify

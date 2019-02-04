@@ -64,7 +64,7 @@ public class HTTPProxy {
                                     @Override
                                     public HttpResponse clientToProxyRequest(HttpObject httpObject) {
                                         // TODO: implement your filtering here
-                                        System.out.println(remoteAddress + originalRequest.getUri().toString() + "\n");
+                                        System.out.println(originalRequest.getUri().toString() + "\n");
                                         //System.out.println(remoteAddress + originalRequest.getUri() + "\n");
                                         FullHttpRequest request = null;
                                         
@@ -72,19 +72,21 @@ public class HTTPProxy {
 //                                        System.out.println("isNull?" + originalRequest.get); 
                                        
                                         
-                                        MongoDbCon.storeHttpRequest(originalRequest, "");
+                                       // MongoDbCon.storeHttpRequest(originalRequest, "");
                                         
                                         
                                         
                                         if(httpObject instanceof FullHttpRequest){
                                         	//System.out.println("ENTREI!");
                                             request = (FullHttpRequest) httpObject;
+                                            MongoDbCon.storeFullHttpRequest(request, "");
                                             CompositeByteBuf contentBuf = (CompositeByteBuf) request.content();
                                             String contentStr = contentBuf.toString(CharsetUtil.UTF_8);
-                                            System.out.println("CONTEUDO: " + contentStr + "\n");
-                                            
+                                            //System.out.println("CONTEUDO: " + contentStr + "\n");
+                                            //JSONObject obj = new JSONObject(contentStr);
+                                            //System.out.println("CONTENT: " + obj.getString("password"));
                                             request.setUri(remoteAddress + request.getUri().toString()); 
-                                            System.out.println("URI:" + request.getUri().toString() + "\n");
+                                            //System.out.println("URI:" + request.getUri().toString() + "\n");
                                             //JSONObject obj = new JSONObject(contentStr);
                                             //System.out.println(obj.toString());
                                             //System.out.println(request.content().toString());
