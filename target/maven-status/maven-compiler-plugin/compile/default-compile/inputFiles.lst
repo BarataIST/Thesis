@@ -1,6 +1,7 @@
 /home/rui/Desktop/Tese/Thesis/src/main/java/rectifyplus/http/parser/HttpParser.java
 /home/rui/Desktop/Tese/Thesis/src/main/java/rectifyplus/Mode.java
 /home/rui/Desktop/Tese/Thesis/src/main/java/rectifyplus/RectifyProps.java
+/home/rui/Desktop/Tese/Thesis/src/main/java/rectifyplus/http/parser/HttpParserMultipart.java
 /home/rui/Desktop/Tese/Thesis/src/main/java/rectifyplus/http/proxy/HTTPProxy.java
 /home/rui/Desktop/Tese/Thesis/src/main/java/rectifyplus/Main.java
 /home/rui/Desktop/Tese/Thesis/src/main/java/rectifyplus/log/MongoDbCon.java

@@ -29,6 +29,7 @@ import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
 import io.netty.util.CharsetUtil;
+import rectifyplus.http.parser.HttpParserMultipart;
 import rectifyplus.log.MongoDbCon;
 
 
@@ -64,7 +65,7 @@ public class HTTPProxy {
                                     @Override
                                     public HttpResponse clientToProxyRequest(HttpObject httpObject) {
                                         // TODO: implement your filtering here
-                                        System.out.println(originalRequest.getUri().toString() + "\n");
+                                        //System.out.println(originalRequest.getUri().toString() + "\n");
                                         //System.out.println(remoteAddress + originalRequest.getUri() + "\n");
                                         FullHttpRequest request = null;
                                         
@@ -74,7 +75,7 @@ public class HTTPProxy {
                                         
                                        // MongoDbCon.storeHttpRequest(originalRequest, "");
                                         
-                                        
+                                       System.out.println("É Multipart: " + HttpParserMultipart.isMultipart(originalRequest));
                                         
                                         if(httpObject instanceof FullHttpRequest){
                                         	//System.out.println("ENTREI!");

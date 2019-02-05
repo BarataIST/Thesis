@@ -81,12 +81,12 @@ public class MongoDbCon {
             	values.add(aux3);
       
             }
-            System.out.println("ARGS: " + args);
-            System.out.println("Numero de args: " + numOfArgs);
+            //System.out.println("ARGS: " + args);
+            //System.out.println("Numero de args: " + numOfArgs);
         }else if(contentStr.startsWith("-")){
-        	System.out.println("DENTRO DO ELSE:\n" + contentStr + "\n");
+        	//System.out.println("DENTRO DO ELSE:\n" + contentStr + "\n");
         	List<String> aux = Arrays.asList(contentStr.toString().split("\n"));
-        	System.out.println("CONTEUDO NO SPLIT: " + aux.get(20));
+        	//System.out.println("CONTEUDO NO SPLIT: " + aux.get(20));
         }
 		Document doc = new Document("method",request.getMethod().name())
 				.append("uri", request.getUri()).append("numberArgs", numOfArgs)
