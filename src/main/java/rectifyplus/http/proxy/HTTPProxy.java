@@ -72,10 +72,16 @@ public class HTTPProxy {
                                         
 //                                        System.out.println("isNull?" + originalRequest.get); 
                                        
-                                        
+                                        //System.out.println(originalRequest.toString() + "\n");
+                                        //System.out.println("CONTENT TYPE: " + originalRequest.headers().get("Content-Type") + "\n");
                                        // MongoDbCon.storeHttpRequest(originalRequest, "");
-                                        
-                                       System.out.println("É Multipart: " + HttpParserMultipart.isMultipart(originalRequest));
+                                       if(originalRequest.getMethod().toString().equals("POST") && 
+                                    		   originalRequest.headers().get("Content-Type").contains("multipart/form-data")) {
+                                        	//System.out.println(originalRequest.headers().get("Content-Type") + "\n");
+                                        	System.out.println("ENTREI CRL \n");
+                                        	System.out.println("É Multipart: " + HttpParserMultipart.getHttpDatas(originalRequest));
+                                        }
+                                      
                                         
                                         if(httpObject instanceof FullHttpRequest){
                                         	//System.out.println("ENTREI!");

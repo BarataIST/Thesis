@@ -18,8 +18,13 @@ public class HttpParserMultipart {
 	
 	public static List<InterfaceHttpData> getHttpDatas(HttpRequest req){
 		HttpPostMultipartRequestDecoder decoder = new HttpPostMultipartRequestDecoder(req);
-		return decoder.getBodyHttpDatas();
+		List<InterfaceHttpData> aux = decoder.getBodyHttpDatas();
+		for(InterfaceHttpData e : aux) {
+			System.out.println("NOVO NOME: " + e.getName());
+		}
+		return aux;
 	}
 	
 	
 }
+
