@@ -78,8 +78,9 @@ public class HTTPProxy {
                                        if(originalRequest.getMethod().toString().equals("POST") && 
                                     		   originalRequest.headers().get("Content-Type").contains("multipart/form-data")) {
                                         	//System.out.println(originalRequest.headers().get("Content-Type") + "\n");
-                                        	System.out.println("ENTREI CRL \n");
-                                        	System.out.println("É Multipart: " + HttpParserMultipart.getHttpDatas(originalRequest));
+                                    	   HttpParserMultipart.requestParametersHandler(originalRequest);
+                                        	//System.out.println("ENTREI CRL \n");
+                                        	//System.out.println("É Multipart: " + HttpParserMultipart.getHttpDatas(originalRequest));
                                         }
                                       
                                         
