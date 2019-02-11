@@ -75,13 +75,8 @@ public class HTTPProxy {
                                         //System.out.println(originalRequest.toString() + "\n");
                                         //System.out.println("CONTENT TYPE: " + originalRequest.headers().get("Content-Type") + "\n");
                                        // MongoDbCon.storeHttpRequest(originalRequest, "");
-                                       if(originalRequest.getMethod().toString().equals("POST") && 
-                                    		   originalRequest.headers().get("Content-Type").contains("multipart/form-data")) {
-                                        	//System.out.println(originalRequest.headers().get("Content-Type") + "\n");
-                                    	   HttpParserMultipart.requestParametersHandler(originalRequest);
-                                        	//System.out.println("ENTREI CRL \n");
-                                        	//System.out.println("É Multipart: " + HttpParserMultipart.getHttpDatas(originalRequest));
-                                        }
+                                      
+                                      
                                       
                                         
                                         if(httpObject instanceof FullHttpRequest){
@@ -90,6 +85,13 @@ public class HTTPProxy {
                                             MongoDbCon.storeFullHttpRequest(request, "");
                                             CompositeByteBuf contentBuf = (CompositeByteBuf) request.content();
                                             String contentStr = contentBuf.toString(CharsetUtil.UTF_8);
+                                            if(originalRequest.getMethod().toString().equals("POST") && 
+                                         		   originalRequest.headers().get("Content-Type").contains("multipart/form-data")) {
+                                             	//System.out.println(originalRequest.headers().get("Content-Type") + "\n");
+                                         	   HttpParserMultipart.requestParametersHandler(request);
+                                             	//System.out.println("ENTREI CRL \n");
+                                             	//System.out.println("É Multipart: " + HttpParserMultipart.getHttpDatas(originalRequest));
+                                             }
                                             //System.out.println("CONTEUDO: " + contentStr + "\n");
                                             //JSONObject obj = new JSONObject(contentStr);
                                             //System.out.println("CONTENT: " + obj.getString("password"));

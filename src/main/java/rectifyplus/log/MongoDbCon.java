@@ -61,10 +61,12 @@ public class MongoDbCon {
 		int numOfArgs = 0;
 		List<String> args = new ArrayList<String>();
 		List<String> values = new ArrayList<String>();
-		CompositeByteBuf contentBuf = (CompositeByteBuf) request.content();
-        String contentStr = contentBuf.toString(CharsetUtil.UTF_8);
+		
        // System.out.println("CONTEUDO: " + contentStr);
-        if(contentStr.contains("{")) {
+        if(request.getMethod().toString().equals("POST") && 
+     		   request.headers().get("Content-Type").contains("application/json")) {
+        	CompositeByteBuf contentBuf = (CompositeByteBuf) request.content();
+            String contentStr = contentBuf.toString(CharsetUtil.UTF_8);
         	contentStr = contentStr.replace("{","");
             contentStr = contentStr.replace("}", "");
             List<String> content = Arrays.asList(contentStr.split(","));
@@ -83,9 +85,10 @@ public class MongoDbCon {
             }
             //System.out.println("ARGS: " + args);
             //System.out.println("Numero de args: " + numOfArgs);
-        }else if(contentStr.startsWith("-")){
+        }else if(request.getMethod().toString().equals("POST") && 
+     		   request.headers().get("Content-Type").contains("multipart/form-data")){
         	//System.out.println("DENTRO DO ELSE:\n" + contentStr + "\n");
-        	List<String> aux = Arrays.asList(contentStr.toString().split("\n"));
+        	//List<String> aux = Arrays.asList(contentStr.toString().split("\n"));
         	//System.out.println("CONTEUDO NO SPLIT: " + aux.get(20));
         }
 		Document doc = new Document("method",request.getMethod().name())

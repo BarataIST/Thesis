@@ -1,11 +1,11 @@
 package rectifyplus.http.parser;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.multipart.Attribute;
@@ -45,7 +45,7 @@ public class HttpParserMultipart {
 		return aux;
 	}
 	
-	public static Map<String, List<String>> requestParametersHandler(HttpRequest req) {
+	/*public static Map<String, List<String>> requestParametersHandler(HttpRequest req) {
 		Map<String, List<String>> parameters = new HashMap<String, List<String>>();
 	    if (req.getMethod().equals(HttpMethod.POST)) {
 	        HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(req);
@@ -64,8 +64,34 @@ public class HttpParserMultipart {
 	            System.out.println(e.getMessage());
 	        }
 	    }
+	    System.out.println("PARAMETROS: " + parameters);
+	    return parameters;
+	}*/
+	
+	
+	public static Map<String, List<String>> requestParametersHandler(FullHttpRequest req) {
+		Map<String, List<String>> parameters = new HashMap<String, List<String>>();
+	    if (req.getMethod().equals(HttpMethod.POST)) {
+	        HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(req);
+	        try {
+	            List<InterfaceHttpData> postList = decoder.getBodyHttpDatas();
+	            for (InterfaceHttpData data : postList) {
+	            	if (data.getHttpDataType() == HttpDataType.Attribute) {
+	            		List<String> values = new ArrayList<String>();
+	            		Attribute value = (Attribute) data;
+	            		value.setCharset(CharsetUtil.UTF_8);
+	            		values.add(value.getValue());
+	            		parameters.put(data.getName(), values);
+	            	}
+	            }
+	        } catch (Exception e) {
+	            System.out.println(e.getMessage());
+	        }
+	    }
+	    System.out.println("PARAMETROS: " + parameters);
 	    return parameters;
 	}
+	
 	
 	
 }
