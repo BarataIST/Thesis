@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import org.bson.Document;
 
@@ -17,6 +18,7 @@ import io.netty.handler.codec.http.HttpRequest;
 import io.netty.util.CharsetUtil;
 import rectifyplus.Mode;
 import rectifyplus.RectifyProps;
+import rectifyplus.http.parser.HttpParserMultipart;
 
 
 
@@ -43,12 +45,6 @@ public class MongoDbCon {
 	}
 	
 	public static void storeHttpRequest(HttpRequest request, String from) {
-		
-		/*Iterator<Entry<String, String>>  it = request.headers().iterator();
-		Entry<String, String> entry;
-		while( (entry = it.next()) != null ){
-			System.out.println(entry.getKey() + " - " + entry.getValue());
-		}*/
 		System.out.println(request.toString());
 		Document doc = new Document("method",request.getMethod().name())
 				.append("uri", request.getUri())
@@ -62,7 +58,6 @@ public class MongoDbCon {
 		List<String> args = new ArrayList<String>();
 		List<String> values = new ArrayList<String>();
 		
-       // System.out.println("CONTEUDO: " + contentStr);
         if(request.getMethod().toString().equals("POST") && 
      		   request.headers().get("Content-Type").contains("application/json")) {
         	CompositeByteBuf contentBuf = (CompositeByteBuf) request.content();
@@ -72,30 +67,32 @@ public class MongoDbCon {
             List<String> content = Arrays.asList(contentStr.split(","));
             numOfArgs = content.size();
             for(String s : content) {
-            	
             	s = s.replaceAll("\"", "");
-            	//System.out.println(s);
             	List<String> aux = Arrays.asList(s.split(":"));
-            	
             	String aux2 = aux.get(0);
             	String aux3 = aux.get(1);
             	args.add(aux2);
             	values.add(aux3);
-      
             }
-            //System.out.println("ARGS: " + args);
-            //System.out.println("Numero de args: " + numOfArgs);
+            System.out.println("ARGUMENTOS: " + args + "\n");
+        	System.out.println("Valores: " + values + "\n");
+        	System.out.println("#Args: " + numOfArgs + "\n");
         }else if(request.getMethod().toString().equals("POST") && 
      		   request.headers().get("Content-Type").contains("multipart/form-data")){
-        	//System.out.println("DENTRO DO ELSE:\n" + contentStr + "\n");
-        	//List<String> aux = Arrays.asList(contentStr.toString().split("\n"));
-        	//System.out.println("CONTEUDO NO SPLIT: " + aux.get(20));
+        	Map<String, List<String>> data = HttpParserMultipart.requestParametersHandler(request);
+        	for(Map.Entry<String, List<String>> entry : data.entrySet()) {
+        		args.add(entry.getKey());
+        		values.addAll(entry.getValue());
+        	}
+        	numOfArgs = args.size();
+        	System.out.println("ARGUMENTOS: " + args + "\n");
+        	System.out.println("Valores: " + values + "\n");
+        	System.out.println("#Args: " + numOfArgs + "\n");
         }
 		Document doc = new Document("method",request.getMethod().name())
 				.append("uri", request.getUri()).append("numberArgs", numOfArgs)
 				.append("args", args).append("values", values)
 				.append("ts", Calendar.getInstance().getTimeInMillis());
-				//.append("from", from);
 		getDatabase().getCollection("httpRequest").insertOne(doc);
 	}
 }

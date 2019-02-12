@@ -63,11 +63,4 @@ public class HttpParser {
 
     }
 
-
-   /* public static KbHttpRequest getKbHttpRequest(String request){
-        ParsedHttpRequest parsedHttpRequest = new ParsedHttpRequest(request);
-        KbHttpRequest kbHttpRequest= new KbHttpRequest(parsedHttpRequest.getTs(),request, parsedHttpRequest.getUri(),parsedHttpRequest.getMethod(),parsedHttpRequest.getParameters().size(),parsedHttpRequest.getParameters().toString(),parsedHttpRequest.getValues().toString(), null);
-        return kbHttpRequest;
-    }*/
-
 }
