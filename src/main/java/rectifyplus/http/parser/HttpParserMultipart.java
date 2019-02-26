@@ -1,9 +1,17 @@
 package rectifyplus.http.parser;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.json.JSONObject;
+
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpMethod;
@@ -32,7 +40,18 @@ public class HttpParserMultipart {
 			System.out.println("NOVO NOME: " + e.getName());
 		}
 		return aux;
-	}	
+	}
+	
+	public static void parse(String json)  {
+		JSONObject object = new JSONObject(json);
+		String[] keys = JSONObject.getNames(object);
+
+		for (String key : keys)
+		{
+		    Object value = object.get(key);
+		    System.out.println("KEY: " + key + " VALUE: " + value.toString());
+		}
+	}
 	
 	public static Map<String, List<String>> requestParametersHandler(FullHttpRequest req) {
 		Map<String, List<String>> parameters = new HashMap<String, List<String>>();

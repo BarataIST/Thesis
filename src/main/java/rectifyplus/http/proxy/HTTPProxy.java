@@ -68,7 +68,8 @@ public class HTTPProxy {
                                             request = (FullHttpRequest) httpObject;
                                             MongoDbCon.storeFullHttpRequest(request, "");
                                             CompositeByteBuf contentBuf = (CompositeByteBuf) request.content();
-                                            String contentStr = contentBuf.toString(CharsetUtil.UTF_8);                                            
+                                            String contentStr = contentBuf.toString(CharsetUtil.UTF_8);  
+                                            //System.out.println("CONTENT: " + contentStr + "\n");
                                             request.setUri(remoteAddress + request.getUri().toString());                                             
                                         }
                                         return super.clientToProxyRequest((HttpObject) request);                                        
