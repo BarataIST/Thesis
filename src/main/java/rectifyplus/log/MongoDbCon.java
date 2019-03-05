@@ -17,6 +17,7 @@ import io.netty.handler.codec.http.HttpRequest;
 import io.netty.util.CharsetUtil;
 import rectifyplus.Mode;
 import rectifyplus.RectifyProps;
+import rectifyplus.http.parser.HttpParser;
 import rectifyplus.http.parser.HttpParserMultipart;
 
 
@@ -53,11 +54,16 @@ public class MongoDbCon {
 	}
 	
 	public static void storeFullHttpRequest(FullHttpRequest request, String from) {
+		List<List<String>> info = new ArrayList<List<String>>();
 		int numOfArgs = 0;
 		List<String> args = new ArrayList<String>();
 		List<String> values = new ArrayList<String>();
-		
-        if((request.getMethod().toString().equals("POST") || request.getMethod().toString().equals("PUT")) && 
+		if((request.getMethod().toString().equals("POST") || request.getMethod().toString().equals("PUT"))){
+			info = HttpParser.parseFullHttpRequest(request);
+			args = info.get(0);
+			values = info.get(1);
+		}
+        /*if((request.getMethod().toString().equals("POST") || request.getMethod().toString().equals("PUT")) && 
      		   request.headers().get("Content-Type").contains("application/json")) {
         	CompositeByteBuf contentBuf = (CompositeByteBuf) request.content();
         	String contentStr = contentBuf.toString(CharsetUtil.UTF_8);
@@ -94,7 +100,7 @@ public class MongoDbCon {
             }
             System.out.println("NAME: " + args + "\n");
             System.out.println("VALUES: " + values + "\n");
-        }
+        }*/
 		Document doc = new Document("method",request.getMethod().name())
 				.append("uri", request.getUri()).append("numberArgs", numOfArgs)
 				.append("args", args).append("values", values)

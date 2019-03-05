@@ -62,17 +62,23 @@ public class HTTPProxy {
                                     @Override
                                     public HttpResponse clientToProxyRequest(HttpObject httpObject) {
                                         // TODO: implement your filtering here
-                                        FullHttpRequest request = null;                                     
+                                        try{
+                                        	FullHttpRequest request = null;                                     
+                                       
                                         
-                                        if(httpObject instanceof FullHttpRequest){                                        
-                                            request = (FullHttpRequest) httpObject;
-                                            MongoDbCon.storeFullHttpRequest(request, "");
-                                            CompositeByteBuf contentBuf = (CompositeByteBuf) request.content();
-                                            String contentStr = contentBuf.toString(CharsetUtil.UTF_8);  
-                                            //System.out.println("CONTENT: " + contentStr + "\n");
-                                            request.setUri(remoteAddress + request.getUri().toString());                                             
+                                        	if(httpObject instanceof FullHttpRequest){                                        
+                                            	request = (FullHttpRequest) httpObject;
+                                            	MongoDbCon.storeFullHttpRequest(request, "");
+                                            	CompositeByteBuf contentBuf = (CompositeByteBuf) request.content();
+                                            	String contentStr = contentBuf.toString(CharsetUtil.UTF_8);  
+                                            	//System.out.println("CONTENT: " + contentStr + "\n");
+                                            	request.setUri(remoteAddress + request.getUri().toString());                                             
+                                        	}
+                                        
+                                        	return super.clientToProxyRequest((HttpObject) request); 
+                                        }finally {
+                                        	
                                         }
-                                        return super.clientToProxyRequest((HttpObject) request);                                        
                                     }
 
                                     @Override
