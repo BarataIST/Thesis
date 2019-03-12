@@ -19,6 +19,7 @@ import rectifyplus.Mode;
 import rectifyplus.RectifyProps;
 import rectifyplus.http.parser.HttpParser;
 import rectifyplus.http.parser.HttpParserMultipart;
+import rectifyplus.recovery.OpLogs;
 
 
 
@@ -28,13 +29,27 @@ public class MongoDbCon {
 	private static final String DATABASE_LOG = "logDB";
 	private static final String DATABASE_TEST = "testDB";
 	private static MongoDatabase database = null;
+	private static MongoClient mongoClient = null;
+	private static long timeStamp = Calendar.getInstance().getTimeInMillis();
 	
 	private static void connect() {
 
-		String dbName = RectifyProps.mode == Mode.TEST ? DATABASE_TEST : (RectifyProps.mode == Mode.TRAINNING ? DATABASE_TRAINING_SETS : DATABASE_LOG) ;
+		String dbName = RectifyProps.mode == Mode.TEST ? DATABASE_TEST : 
+			(RectifyProps.mode == Mode.TRAINNING ? DATABASE_TRAINING_SETS : DATABASE_LOG) ;
 		
-		MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+		mongoClient = MongoClients.create("mongodb://localhost:27017");
 		database = mongoClient.getDatabase(dbName);
+	}
+	
+	private static void connectMongo() {
+		mongoClient = MongoClients.create("mongodb://localhost:27017");
+	}
+	
+	public static MongoClient getMongo() {
+		if(mongoClient == null) {
+			connectMongo();
+		}
+		return mongoClient;
 	}
 	
 	public static MongoDatabase getDatabase() {
@@ -48,7 +63,7 @@ public class MongoDbCon {
 		System.out.println(request.toString());
 		Document doc = new Document("method",request.getMethod().name())
 				.append("uri", request.getUri())
-				.append("ts", Calendar.getInstance().getTimeInMillis())
+				.append("ts", timeStamp)
 				.append("from", from);
 		getDatabase().getCollection("httpRequest").insertOne(doc);
 	}
@@ -104,7 +119,9 @@ public class MongoDbCon {
 		Document doc = new Document("method",request.getMethod().name())
 				.append("uri", request.getUri()).append("numberArgs", numOfArgs)
 				.append("args", args).append("values", values)
-				.append("ts", Calendar.getInstance().getTimeInMillis());
+				.append("ts", timeStamp);
 		getDatabase().getCollection("httpRequest").insertOne(doc);
+		System.out.println("DEI SET AO TIME\n");
+		OpLogs.setTime(timeStamp);
 	}
 }

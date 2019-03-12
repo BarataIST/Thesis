@@ -31,6 +31,7 @@ import io.netty.handler.codec.http.HttpVersion;
 import io.netty.util.CharsetUtil;
 import rectifyplus.http.parser.HttpParserMultipart;
 import rectifyplus.log.MongoDbCon;
+import rectifyplus.recovery.OpLogs;
 
 
 
@@ -77,7 +78,8 @@ public class HTTPProxy {
                                         
                                         	return super.clientToProxyRequest((HttpObject) request); 
                                         }finally {
-                                        	
+                                        	System.out.println("ENTREI");
+                                        	OpLogs.getOpLogs();                                       	
                                         }
                                     }
 
