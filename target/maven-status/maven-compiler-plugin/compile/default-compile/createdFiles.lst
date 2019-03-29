@@ -1,5 +1,6 @@
 rectifyplus/recovery/MongoConnectionHandler.class
 rectifyplus/RectifyProps.class
+rectifyplus/recovery/CreateSignRec.class
 rectifyplus/http/parser/HttpParser.class
 rectifyplus/http/proxy/HTTPProxy$1.class
 rectifyplus/http/parser/ParsedHttpRequest.class

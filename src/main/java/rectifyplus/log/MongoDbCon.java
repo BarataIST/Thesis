@@ -73,12 +73,12 @@ public class MongoDbCon {
 		int numOfArgs = 0;
 		List<String> args = new ArrayList<String>();
 		List<String> values = new ArrayList<String>();
-		if((request.getMethod().toString().equals("POST") || request.getMethod().toString().equals("PUT"))){
-			info = HttpParser.parseFullHttpRequest(request);
-			args = info.get(0);
-			values = info.get(1);
-		}
-        /*if((request.getMethod().toString().equals("POST") || request.getMethod().toString().equals("PUT")) && 
+
+		info = HttpParser.parseFullHttpRequest(request);
+		args = info.get(0);
+		values = info.get(1);
+
+		/*if((request.getMethod().toString().equals("POST") || request.getMethod().toString().equals("PUT")) && 
      		   request.headers().get("Content-Type").contains("application/json")) {
         	CompositeByteBuf contentBuf = (CompositeByteBuf) request.content();
         	String contentStr = contentBuf.toString(CharsetUtil.UTF_8);
@@ -121,7 +121,7 @@ public class MongoDbCon {
 				.append("args", args).append("values", values)
 				.append("ts", timeStamp);
 		getDatabase().getCollection("httpRequest").insertOne(doc);
-		System.out.println("DEI SET AO TIME\n");
-		OpLogs.setTime(timeStamp);
+		//System.out.println("DEI SET AO TIME\n");
+		//OpLogs.setTime(timeStamp);
 	}
 }
