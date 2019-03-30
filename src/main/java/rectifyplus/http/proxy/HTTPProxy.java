@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.time.Instant;
 import java.util.Calendar;
 
 import org.json.JSONObject;
@@ -45,7 +46,7 @@ public class HTTPProxy {
     private int countResponse = 0;
     private boolean isTeaching = true;
     private FullHttpRequest requestForTeach = null;
-    private long time = 0;
+    private Instant time = null;
 
     public HTTPProxy(){}
 
@@ -79,7 +80,7 @@ public class HTTPProxy {
                                 					changeValue(1);
                                 					System.out.println("CONTENT: " + contentStr  + "\n");
                                 					requestForTeach = request;
-                                					time = Calendar.getInstance().getTimeInMillis();
+                                					time = Instant.now();
                                 					
                                 					//GUARDAR O PEDIDO HTTP PARA FAZER O SIGNATURE RECORD
                                 				}else {
@@ -99,7 +100,7 @@ public class HTTPProxy {
                                     		if(getValue() == 1) {
                                     			System.out.println("ENTREI NA RESPOSTA AO CLIENT");
                                     			try {
-													Thread.sleep(3000);
+													Thread.sleep(1000);
 												} catch (InterruptedException e) {
 													// TODO Auto-generated catch block
 													e.printStackTrace();
