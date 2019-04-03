@@ -52,6 +52,12 @@ public class MongoDbCon {
 		return mongoClient;
 	}
 	
+	public static MongoDatabase getMongoToTeach() {
+		mongoClient = MongoClients.create("mongodb://localhost:27017");
+		MongoDatabase db = mongoClient.getDatabase(DATABASE_TRAINING_SETS);
+		return db;
+	}
+	
 	public static MongoDatabase getDatabase() {
 		if (database == null) {
 			connect();

@@ -4,6 +4,7 @@ rectifyplus/recovery/CreateSignRec.class
 rectifyplus/http/parser/HttpParser.class
 rectifyplus/http/proxy/HTTPProxy$1.class
 rectifyplus/http/parser/ParsedHttpRequest.class
+Parsers/OplogParser.class
 rectifyplus/Main.class
 rectifyplus/log/MongoDbCon.class
 rectifyplus/http/parser/HttpParserMultipart.class

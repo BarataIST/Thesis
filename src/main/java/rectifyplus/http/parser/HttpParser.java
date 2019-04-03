@@ -89,8 +89,6 @@ public class HttpParser {
      		}
      		info.add(args);
             info.add(values);
-     		System.out.println("NAME: " + args + "\n");
-             System.out.println("VALUES: " + values + "\n");
          }else if(request.getMethod().toString().equals("POST") && 
       		   request.headers().get("Content-Type").contains("multipart/form-data")){
          	Map<String, List<String>> data = HttpParserMultipart.requestParametersHandler(request);
@@ -100,10 +98,6 @@ public class HttpParser {
          	}
          	info.add(args);
             info.add(values);
-         	//numOfArgs = args.size();
-         	System.out.println("ARGUMENTOS: " + args + "\n");
-         	System.out.println("Valores: " + values + "\n");
-         	//System.out.println("#Args: " + numOfArgs + "\n");
          }else if((request.getMethod().toString().equals("POST") || request.getMethod().toString().equals("PUT")) && 
        		   request.headers().get("Content-Type").contains("application/x-www-form-urlencoded")) {
          	CompositeByteBuf contentBuf = (CompositeByteBuf) request.content();
@@ -116,8 +110,6 @@ public class HttpParser {
              }
              info.add(args);
              info.add(values);
-             System.out.println("NAME: " + args + "\n");
-             System.out.println("VALUES: " + values + "\n");
          }
     	return info;
     }

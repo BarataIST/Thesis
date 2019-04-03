@@ -8,7 +8,9 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import org.json.JSONObject;
 import org.littleshoot.proxy.HttpFilters;
@@ -31,6 +33,7 @@ import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
 import io.netty.util.CharsetUtil;
+import rectifyplus.http.parser.HttpParser;
 import rectifyplus.http.parser.HttpParserMultipart;
 import rectifyplus.log.MongoDbCon;
 import rectifyplus.recovery.CreateSignRec;
@@ -47,6 +50,8 @@ public class HTTPProxy {
     private boolean isTeaching = true;
     private FullHttpRequest requestForTeach = null;
     private Instant time = null;
+    private List<List<String>> conteudo = null;
+    
 
     public HTTPProxy(){}
 
@@ -78,7 +83,9 @@ public class HTTPProxy {
                                 			if(contentStr.length() != 0) {
                                 				if(isTeaching) {
                                 					changeValue(1);
-                                					System.out.println("CONTENT: " + contentStr  + "\n");
+                                					List<List<String>> content = new ArrayList<List<String>>();
+                                					content = HttpParser.parseFullHttpRequest(request);
+                                					conteudo = content;
                                 					requestForTeach = request;
                                 					time = Instant.now();
                                 					
@@ -100,12 +107,12 @@ public class HTTPProxy {
                                     		if(getValue() == 1) {
                                     			System.out.println("ENTREI NA RESPOSTA AO CLIENT");
                                     			try {
-													Thread.sleep(1000);
+													Thread.sleep(2000);
 												} catch (InterruptedException e) {
 													// TODO Auto-generated catch block
 													e.printStackTrace();
 												}
-                                    			CreateSignRec.CreateSigRec(requestForTeach, time);
+                                    			CreateSignRec.CreateSigRec(requestForTeach,conteudo, time);
                                     			changeValue(0);
                                     		} 
                                     	}
