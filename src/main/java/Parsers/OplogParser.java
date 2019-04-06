@@ -10,11 +10,17 @@ public class OplogParser {
 
 	public static List<List<String>> parseDoc(Document doc) {
 		
+		System.out.println("DOCUMENT: " + doc.toString() + "\n");
+		Document aux1 = doc;
 		List<List<String>> ret = new ArrayList<List<String>>();
 		List<String> info = new ArrayList<String>();
 		List<String> values = new ArrayList<String>();
-		int num = StringUtils.countMatches(doc.toJson(), ":");
-		String[] aux = doc.toJson().substring(1, doc.toJson().length()-1).split(",");
+		if(doc.containsKey("$set")) {
+			System.out.println("ENTREI");
+			aux1 =(Document) doc.get("$set");
+		}
+		int num = StringUtils.countMatches(aux1.toJson(), ":");
+		String[] aux = aux1.toJson().substring(1, aux1.toJson().length()-1).split(",");
 		
 		for(String i : aux) {
 			String[] r = i.split(":",num);
