@@ -78,6 +78,7 @@ public class HTTPProxy {
                                 		FullHttpRequest request = null;                                                                                                                  
                                 		if(httpObject instanceof FullHttpRequest){                                       
                                 			request = (FullHttpRequest) httpObject;
+                                			System.out.println("REQUEST: " + request.toString() + "\n");
                                 			CompositeByteBuf contentBuf = (CompositeByteBuf) request.content();
                                 			String contentStr = contentBuf.toString(CharsetUtil.UTF_8);
                                 			if(contentStr.length() != 0) {

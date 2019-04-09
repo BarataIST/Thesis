@@ -11,8 +11,9 @@ import org.bson.Document;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoDatabase;
 
-import Parsers.OplogParser;
+
 import io.netty.handler.codec.http.FullHttpRequest;
+import rectifyplus.Parsers.OplogParser;
 import rectifyplus.log.MongoDbCon;
 
 public class CreateSignRec {
@@ -27,13 +28,11 @@ public class CreateSignRec {
 		if(!oplogs.equals(null)) {
 			for(Document i : oplogs) {
 				Document aux1 = (Document) i.get("o");
+				Document aux = new Document("type",i.get("op"));
 				if(!aux1.isEmpty()) {
 					info = OplogParser.parseDoc(aux1);
-				}
-				Document aux = new Document("type",i.get("op")).
-						append("number of columns", Integer.toString(info.get(0).size()));
-				if(!aux1.equals(null)) {
 					aux.append("columns", info.get(0)).
+					append("number of columns", Integer.toString(info.get(0).size())).
 					append("values", info.get(1));
 				}
 				aux.append("namespace", i.get("ns"));
