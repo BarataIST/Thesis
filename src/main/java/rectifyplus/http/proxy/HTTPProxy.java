@@ -78,24 +78,31 @@ public class HTTPProxy {
                                 		FullHttpRequest request = null;                                                                                                                  
                                 		if(httpObject instanceof FullHttpRequest){                                       
                                 			request = (FullHttpRequest) httpObject;
-                                			System.out.println("REQUEST: " + request.toString() + "\n");
                                 			CompositeByteBuf contentBuf = (CompositeByteBuf) request.content();
                                 			String contentStr = contentBuf.toString(CharsetUtil.UTF_8);
-                                			if(contentStr.length() != 0) {
+                                			if((contentStr.length() != 0) || (request.getMethod().toString() == "DELETE")) {
                                 				if(isTeaching) {
                                 					changeValue(1);
                                 					List<List<String>> content = new ArrayList<List<String>>();
-                                					content = HttpParser.parseFullHttpRequest(request);
+                                					if(request.getMethod().toString() == "DELETE") {
+                                						List<String> args = new ArrayList<String>();
+                                						List<String> values = new ArrayList<String>();
+                                						args.add("id");
+                                						String uri = request.getUri();
+                                						String[] aux = uri.split("/");
+                                						values.add(aux[aux.length-1]);
+                                						content.add(args);
+                                						content.add(values);
+                                					}else {
+                                						content = HttpParser.parseFullHttpRequest(request);
+                                					}
                                 					conteudo = content;
                                 					requestForTeach = request;
                                 					time = Instant.now();
-                                					
-                                					//GUARDAR O PEDIDO HTTP PARA FAZER O SIGNATURE RECORD
-                                				}else {
+                                				}else{
                                 					MongoDbCon.storeFullHttpRequest(request, "");
                                 				}                              				
                                 			}
-                                			//System.out.println("CONTENT: " + contentStr + "\n");
                                 			request.setUri(remoteAddress + request.getUri().toString());                                             
                                 		}
                                 		return super.clientToProxyRequest((HttpObject) request);
