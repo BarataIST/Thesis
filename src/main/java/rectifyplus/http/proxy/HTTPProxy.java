@@ -38,6 +38,7 @@ import rectifyplus.http.parser.HttpParserMultipart;
 import rectifyplus.log.MongoDbCon;
 import rectifyplus.recovery.CreateSignRec;
 import rectifyplus.recovery.OpLogs;
+import rectifyplus.wekaConnection.WekaCon;
 
 
 
@@ -82,9 +83,15 @@ public class HTTPProxy {
                                 			String contentStr = contentBuf.toString(CharsetUtil.UTF_8);
                                 			if((contentStr.length() != 0) || (request.getMethod().toString() == "DELETE")) {
                                 				if(isTeaching) {
+                                					try {
+														WekaCon.connectTest();
+													} catch (Exception e) {
+														// TODO Auto-generated catch block
+														e.printStackTrace();
+													}
                                 					changeValue(1);
                                 					List<List<String>> content = new ArrayList<List<String>>();
-                                					if(request.getMethod().toString() == "DELETE") {
+                                					if((request.getMethod().toString() == "DELETE") && (contentStr.length() == 0)) {
                                 						List<String> args = new ArrayList<String>();
                                 						List<String> values = new ArrayList<String>();
                                 						args.add("id");
